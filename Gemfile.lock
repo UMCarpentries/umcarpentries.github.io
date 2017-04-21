@@ -1,0 +1,24 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    ffi (1.9.18)
+    jekyll-watch (1.5.0)
+      listen (~> 3.0, < 3.1)
+    kramdown (1.13.2)
+    listen (3.0.0)
+      rb-fsevent (>= 0.9.3)
+      rb-inotify (>= 0.9)
+    rb-fsevent (0.9.8)
+    rb-inotify (0.9.8)
+      ffi (>= 0.5.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  jekyll-watch (~> 1.5)
+  kramdown
+  listen (= 3.0)
+
+BUNDLED WITH
+   1.14.3

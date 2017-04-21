@@ -1,0 +1,552 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+---
+@charset "utf-8";
+
+
+
+// Our variables
+$base-font-family: 'Ubuntu', sans-serif;;
+$base-font-size:   16px;
+$small-font-size:  $base-font-size * 0.875;
+$base-line-height: 1.5;
+
+$spacing-unit:     30px;
+
+$match-color:		rgb(27, 70, 111);
+$comp-color:		rgb(97, 137, 183);
+$link-color:		rgb(255, 203, 11);
+
+
+$text-color:		#000;
+$background-color:	#fff;
+$brand-color:		$match_color;
+$grey-color:		#999;
+$grey-color-light:	#ddd;
+$grey-color-dark:	#555;
+
+$on-palm:          600px;
+$on-laptop:        800px;
+
+
+
+// Using media queries with like this:
+// @include media-query($palm) {
+//     .wrapper {
+//         padding-right: $spacing-unit / 2;
+//         padding-left: $spacing-unit / 2;
+//     }
+// }
+@mixin media-query($device) {
+    @media screen and (max-width: $device) {
+        @content;
+    }
+}
+
+
+
+// Import partials from `sass_dir` (defaults to `_sass`)
+@import
+        "base",
+        "layout",
+        "syntax-highlighting"
+;
+
+
+
+html{
+	background-color: $grey-color;
+}
+
+body {
+	max-width: 1000px;
+	margin: 0 auto;
+	background-color: #fff;
+	color: $match-color;
+}
+
+.container-fluid {
+	width: 100%;
+	padding: 0;
+}
+
+.row {
+	margin: 0;
+}
+
+.header {
+	margin: 0 20px 0 0;
+	padding: 0;
+	color: $match-color;
+}
+
+.nav, .nav-pills {
+	padding: 0px;
+	margin: 0px;
+}
+
+.nav ul {
+	list-style-type: none;
+	float: right;
+	padding: 0px;
+	margin: 0px;
+}
+
+.nav li {
+	height: 35px;
+	display: inline-block;
+	margin: 10px 0 0 20px;
+	padding: 0px;
+	text-align: center;
+	line-height: 100%;
+}
+
+.nav > li > a {
+	font-family: "Open Sans", sans-serif;
+	font-size: 14px;
+	font-weight: 800;
+	color: $match-color;
+	padding: 5px 10px;
+	text-decoration: none;
+}
+
+.nav>li>a:hover {
+	text-decoration: none;
+	color: $comp-color;
+	border-bottom: solid $comp-color 2px;
+	border-radius: 0px;
+	background-color: transparent;
+}
+
+.nav-pills li.active a {
+	background-color: $comp-color;
+	border-radius: 0;
+	border-bottom: solid $comp-color 2px;
+	border-radius: 0px;
+}
+.nav-pills li.active a:hover {
+	background-color: $comp-color;
+}
+
+
+.footer {
+	background-color: $match-color;
+	color: #fff;
+	font-weight: 50;
+	margin-top: 30px;
+	padding: 20px 0 20px 0;
+
+	.container-fluid {
+		margin: 0 auto;
+		padding: 0 40px;
+	}
+	.row {
+		width: 100%;
+		margin: 0;
+		padding: 0;
+	}
+	.col-md-6 {
+		padding: 0;
+		margin: 0;
+	}
+	p {
+		padding: 0;
+		margin: 0;
+	}
+	a, a:hover {
+		color: white;
+		text-decoration: none;
+	}
+
+	.icon > svg > path {
+		fill: #fff;
+	}
+
+	.copy {
+		text-align: right;
+	}
+	.address > p {
+		font-size: 10px;
+		margin-left: 10px;
+	}
+	.address > h4 {
+		font-size: 15px;
+		margin-bottom: 0;
+		font-weight: 800;
+	}
+	.attribution {
+		font-size: 10px;
+		padding-top: 20px;
+		a {
+			text-decoration: underline;
+		}
+	}
+}
+
+.intro {
+	background: url(/assets/img/workshop.jpg) center center no-repeat;
+	background-size: cover;
+	color: #fff;
+	padding: 50px 0 250px 0;
+
+	.container-fluid {
+	/*	padding: 0;*/
+	}
+
+	h1 {
+		padding: 0 60px 0 60px;
+		margin: 20px 0;
+		font-weight: 700;
+		font-size: 40px;
+	}
+
+}
+
+
+.blurb {
+	color: $match-color;
+	margin: 20px 0 0 0;
+
+	.row {
+		margin: 20px 20px;
+	}
+	h3 {
+		// padding: 0 20px;
+		margin: 0 0 0 0;
+		font-weight: 800;
+	}
+	p {
+		// padding: 0 20px;
+	}
+	img {
+		margin: 0 auto 0;
+		// padding: 0;
+	}
+
+	a {
+	    color: $link-color;
+	    text-decoration: underline;
+
+	    &:visited {
+	        color: darken($match-color, 15%);
+	    }
+
+	    &:hover {
+	        color: $match-color;
+	        text-decoration: none;
+	    }
+	}
+}
+
+
+.button-row {
+	margin: 20px 0;
+
+	h2 {
+		color: $match-color;
+		font-weight: 600;
+		text-align: center;
+		margin: 0px 0 30px;
+	}
+
+	.col-md-3 {
+		position: relative;
+	}
+
+	.pic {
+		opacity: 0.3;
+		position: relative;
+		margin: auto;
+	}
+
+	.caption {
+		color: $match-color;
+		font-weight: 800;
+		font-size: 24px;
+		text-decoration: none;
+
+		line-height: 110%;
+		text-align: center;
+		position: absolute;
+		top: 50%;
+	    left: 50%;
+	    transform: translate(-50%, -50%);
+	}
+
+	a:hover {
+		.pic {
+			opacity: 1.0;
+		}
+		.caption {
+			color: #fff;
+		}
+	}
+}
+
+
+.default-wrapper {
+	margin: 20px 40px;
+}
+
+.vcenter {
+    display: flex;
+    align-items: center;
+}
+
+
+h2 {
+	color: $match-color;
+	font-weight: 600;
+	font-size: 34px;
+}
+
+.news {
+	margin: 0px;
+
+	.blurb {
+		color: #755125;
+		font-size: 19px;
+		font-weight: 500;
+	}
+
+	ul {
+		list-style-type: none;
+		margin: 0;
+	}
+
+	li {
+		margin-bottom: 30px;
+	}
+
+	a {
+		color: $link-color;
+	}
+	.title {
+		font-weight: 800;
+		text-decoration: none;
+		color: $match-color;
+		display: block;
+	    font-size: 24px;
+		margin: 0;
+		padding: 0;
+	}
+	.title:visited {
+		color: $match-color;
+	}
+	.title:hover {
+		color: $match-color;
+		text-decoration: none;
+	}
+
+	.meta {
+		margin: 0;
+		color: $comp-color;
+		padding: 1px 0;
+		font-size: 14px;
+	}
+
+	.content {
+		margin: 10px 0;
+	}
+
+	.read-more {
+		font-weight: 200;
+		font-style: italic;
+		color: $match-color;
+	}
+}
+
+.workshops {
+	margin: 0px;
+
+	.blurb {
+		color: #755125;
+		font-size: 19px;
+		font-weight: 500;
+	}
+
+	ul {
+		list-style-type: none;
+		margin: 0;
+	}
+
+	li {
+		margin-bottom: 30px;
+	}
+
+	a {
+		color: $link-color;
+	}
+
+	.title {
+		font-weight: 800;
+		text-decoration: none;
+		color: $match-color;
+		display: block;
+	    font-size: 24px;
+		margin: 0;
+		padding: 0;
+	}
+	.title:visited {
+		color: $match-color;
+	}
+	.title:hover {
+		color: $match-color;
+		text-decoration: none;
+	}
+
+	.meta {
+		margin: 0;
+		color: $comp-color;
+		padding: 1px 0;
+		font-size: 14px;
+	}
+
+	.content {
+		margin: 10px 0;
+	}
+
+	.read-more {
+		font-weight: 200;
+		font-style: italic;
+		color: $match-color;
+	}
+}
+
+
+a {
+	text-decoration: underline;
+	color: $link-color;
+
+  &:hover {
+      text-decoration: none;
+  }
+}
+
+
+.picture-grid {
+	.pic {
+		opacity: 0.3;
+		position: relative;
+		margin: auto;
+	}
+
+ 	.caption {
+		color: $match-color;
+		font-weight: 800;
+		font-size: 24px;
+		text-decoration: none;
+
+		line-height: 110%;
+		text-align: center;
+		position: absolute;
+		top: 50%;
+	    left: 50%;
+	    transform: translate(-50%, -50%);
+	}
+
+	a:hover .pic {
+		opacity: 1.0;
+	}
+
+	a:hover .caption {
+	/*	color: #fff;	*/
+		color: transparent;
+	}
+
+	.row {
+		margin-bottom: 30px;
+	}
+}
+
+.instructors {
+	h2 {
+		padding:  0;
+		margin: 0;
+	}
+
+	h3 {
+		padding: 10px 0 10px 0;
+		margin: 0;
+	}
+	a, a:hover {
+		color: $match-color;
+		text-decoration: none;
+	}
+
+	.col-md-7 {
+		padding: 0;
+
+	}
+
+	.container-fluid {
+		margin: 0;
+		padding: 0;
+	}
+
+	.social {
+		padding: 0;
+		padding-bottom: 10px;
+		margin: 0;
+	}
+
+	.icon > svg > path {
+		fill: $match-color;
+	}
+
+	ul {
+		margin-left: 20px;
+	}
+
+	.papers {
+		ol {
+		}
+		li {
+			padding-bottom: 10px;
+		}
+
+	}
+
+}
+
+
+
+.index_page {
+	h3 {
+		margin: 30px 0 0 0;
+		font-weight: 600;
+	}
+	h4 {
+		margin: 20px 0 10px 0;
+		font-weight: 500;
+	}
+
+}
+
+
+pre {
+        font-family: "Courier 10 Pitch", Courier, monospace;
+        font-size: 95%;
+        line-height: 140%;
+        white-space: pre;
+        white-space: pre-wrap;
+        white-space: -moz-pre-wrap;
+        white-space: -o-pre-wrap;
+    }
+
+    code {
+        font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
+        font-size: 95%;
+        line-height: 140%;
+        white-space: pre;
+        white-space: pre-wrap;
+        white-space: -moz-pre-wrap;
+        white-space: -o-pre-wrap;
+        background: #faf8f0;
+    }
+
+    #content code {
+        display: block;
+        padding: 0.5em 1em;
+        border: 1px solid #bebab0;
+    }
