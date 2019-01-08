@@ -1,16 +1,21 @@
 ---
 layout: instructors
 title: Byron Smith
-picture:
-twitter:
-github:
-email:
-linkedin:
-google_scholar:
-orcid:
+picture: /assets/img/smith_square.jpg
+twitter: ByronJSmith
+github: bsmith89
+email: bjsm@umich.edu
+linkedin: bsmith89
+google_scholar: https://scholar.google.com/citations?user=ZtIlAngAAAAJ&hl=en
+orcid: 0000-0002-0182-404X
 research_gate:
-website:
-phone:
+website: http://blog.byronjsmith.com
+phone: 202-507-9572
 ---
 
-Affogato blog vinyl pork belly, subway tile air plant XOXO put a bird on it bespoke tofu butcher. Single-origin coffee mumblecore woke locavore. Ugh vaporware vice, post-ironic XOXO distillery man bun four dollar toast slow-carb raclette. Helvetica godard pork belly, bespoke cray tote bag stumptown retro health goth artisan shabby chic whatever heirloom occupy. Mumblecore letterpress venmo, next level kogi succulents sartorial small batch tumeric chambray. Shabby chic fingerstache put a bird on it swag photo booth. Freegan bicycle rights wolf banjo 8-bit food truck hoodie, shoreditch cronut salvia mlkshk letterpress austin.
+I study the relationship between gut microbes and longevity in mice.
+Much of my work is at the intersection of bioinformatics, ecology, and
+statistics.
+I teach computational skills to my colleagues because I want to live in a world
+where we can easily share data and analyses between scientists, between labs,
+and between disciplines.
