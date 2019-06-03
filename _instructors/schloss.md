@@ -8,9 +8,11 @@ email: pschloss@umich.edu
 linkedin:
 google_scholar: https://scholar.google.com/citations?user=xswWwaMAAAAJ&hl=en
 orcid: 0000-0002-6935-4275
-research_gate: 
+research_gate:
 website: http://pschloss.github.io
 phone: (734)647-5801
 ---
 
-My interests span the breadth of microbiome research. My work in this field can be divided in to "wet" and "dry" components that are each a result of my interdisciplinary training and drive to look at microbial research questions differently. My interdisciplinary training motivates me to investigate bacteria as members of communities. This community-based approach has yielded recent publications from my laboratory where, instead of trying to link individual bacteria with pathogenesis, we seek to understand how entire microbial communities and subsets of those communities could be used to classify people by their health status or risk of disease. When I started pursuing these questions as a postdoc, we didn't have the necessary computational tools to find the answers. So we made them ourselves. Trained as a biological engineer, I acquired the skills needed to develop several prominent computer programs for analyzing the DNA sequence data generated from microbial ecology experiments. Together, my papers describing these tools have been cited thousands of times. The ability to bridge biology and computational sciences has allowed me to leave a positive impact on a diverse array of important research questions spanning from colon cancer and *Clostridium difficile* infections to the soil and deep sea.
+I'm a microbiologist who was trained as an engineer. I've always been interested in the quantitative side of science. Although the material can take practice to master, I have enjoyed learning how to use computational tools to enable greater reproducibility of my data analyses. I first learned R by using a script I found for generating a plot and modifying it slightly to visualize other data. With time and practice, I've found it to be a very powerful language that I've used to analyze everything from [baseball](http://www.riffomonas.org/2018_asb/) to [microbial ecology](http://www.riffomonas.org/minimalR/) data! I also enjoy working with people who are starting their journey with tools and seeing them get to the "aha" moments where they are able to translate what we do in a workshop to their own research.
+
+When I'm not analyzing data or teaching, I enjoy working with my family on our farm where we raise pigs, sheep, cows, and chickens. Yes - I even use the skills from Software and Data Carpentry to analyze my farm data!
