@@ -11,6 +11,7 @@ orcid: 0000-0001-5284-5521
 research_gate:
 website:
 phone:
+status: current
 ---
 
 I'm a virologist studying the role of viruses play in the intestinal community and the impact they have on our health.

@@ -11,6 +11,7 @@ orcid: 0000-0002-0182-404X
 research_gate:
 website: http://blog.byronjsmith.com
 phone: 202-507-9572
+status: alumni
 ---
 
 I study the relationship between gut microbes and longevity in mice.

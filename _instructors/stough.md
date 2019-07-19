@@ -11,6 +11,7 @@ orcid: 0000-0003-3488-4169
 research_gate: https://www.researchgate.net/profile/Joshua_Stough2
 website: http://jmastough.github.io
 phone:
+status: current
 ---
 
 I'm a microbial ecology postdoc working in Pat Schloss's lab at the University of Michigan Medical School, studying the gut microbiome. As a full-time researcher, I don't have many opportunities to teach as a part of my job, so I joined the Sofware Carpentry Ogansization here at UMich to hone my teaching skills and be a part of the community.
