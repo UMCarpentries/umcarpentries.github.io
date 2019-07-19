@@ -1,7 +1,7 @@
 ---
 layout: instructors
 title: Meghan Duffy
-picture:
+picture: /assets/img/duffy.jpg
 twitter:
 github:
 email:
