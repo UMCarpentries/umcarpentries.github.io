@@ -57,7 +57,7 @@ def update_new_posts(workdir, dryrun=False, username="umswc"):
     while workshop.is_upcoming:  # if workshop date is after today, add/update on website
         print(f"Adding workshop {workshop.date}")
         if not dryrun:
-            with open(f"{workdir}/{workshop.name}.md", 'w') as file:
+            with open(os.path.join(workdir, f"{workshop.name}.md"), 'w') as file:
                 file.write(workshop.yaml)
         workshop = Workshop.from_repo(repos.pop(0))
 
