@@ -1,4 +1,4 @@
-""" Update the workshops page by purging old posts and creating new posts for upcoming workshops.
+""" Update the workshops page by removing old posts and creating new posts for upcoming workshops.
 
 Usage:
     update-workshops.py -h | --help
@@ -83,14 +83,27 @@ class Workshop:
 
     @property
     def yaml(self):
+        """
+        Format workshop attributes as YAML
+        :return: YAML-formatted string of workshop attributes
+        """
         return f"---\ntitle: {self.title}\ndate: {self.date}\nend_date: {self.end_date}\ninstructors:\n{self.instructors}\nhelpers:\n{self.helpers}\nsite: {self.site}\netherpad: {self.etherpad}\neventbrite: {self.eventbrite}\n---"
 
     @property
     def is_upcoming(self):
+        """
+        Check whether the workshop end date is after today
+        :return: True if workshop end date is after today, else False
+        """
         return datetime.datetime.today() < datetime.datetime.strptime(self.end_date, '%Y%m%d')
 
     @classmethod
-    def from_repo(cls, repo):  # TODO parse repo info
+    def from_repo(cls, repo):
+        """
+        Create a Workshop from a Github repository
+        :param repo: a Github repository from pygithub
+        :return: a Workshop instance
+        """
         header = {key: (value if value else '') for key, value in yaml.load(
             base64.b64decode(repo.get_contents('index.md').content).decode('utf-8').strip("'").split('---')[1],
             Loader=yaml.Loader).items()}
