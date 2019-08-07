@@ -7,7 +7,7 @@ The [website](https://umswc.github.io) for the University of Michigan chapter of
 ## Updating the workshops page
 
 After creating a workshop repository and filling in the required information, fork it into this organization.
-Then you can update the workshops listed on the website by running the [`update-workshops`]('update-workshops') script from the website repo's working directory.
+Then you can update the workshops listed on the website by running the [`update-workshops`](update-workshops.py) script from the website repo's working directory.
 
 Dependences are listed in [`env.yaml`](env.yaml).
 You can install them with your preferred package manager, or use [conda](https://docs.conda.io/en/latest/miniconda.html):
