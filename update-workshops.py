@@ -2,11 +2,12 @@
 
 Usage:
     update-workshops.py -h | --help
-    update-workshops.py [--dryrun --workdir=<workdir> --username=<username>]
+    update-workshops.py [--dryrun --write-all --workdir=<workdir> --username=<username>]
 
 Options:
     -h --help                       Display this help message.
-    -d --dryrun                     Print posts to be added and removed without doing it. [default: False]
+    -d --dryrun                     Print posts to be added and removed without doing it.
+    -a --write-all                  Write all workshop posts, both past and upcoming.
     -w --workdir=<workdir>          Directory containing workshop posts. [default: workshops/_posts]
     -u --username=<username>        The GitHub username or organization name. [default: umswc]
 """
@@ -23,8 +24,14 @@ def main(args):
     """
     :param args: command-line arguments from docopt
     """
-    remove_old_posts(args['--workdir'], dryrun=args['--dryrun'])
-    update_new_posts(args['--workdir'], dryrun=args['--dryrun'], username=args['--username'])
+    user_swc = Github().get_user(args['--username'])
+    repos = sorted([repo for repo in user_swc.get_repos() if repo.name.split('-')[0].isnumeric()],
+                   key=lambda repo: repo.name, reverse=True)
+    if args['--write-all']:
+        write_all_posts(repos, args['--workdir'], dryrun=args['--dryrun'])
+    else:
+        remove_old_posts(args['--workdir'], dryrun=args['--dryrun'])
+        write_upcoming_posts(repos, args['--workdir'], dryrun=args['--dryrun'])
 
 
 def remove_old_posts(workdir, dryrun=False):
@@ -33,6 +40,7 @@ def remove_old_posts(workdir, dryrun=False):
     :param dryrun: if True, print workshops to remove without removing them.
     :return: None
     """
+    print("Removing old workshop posts")
     today = datetime.datetime.today()
     for filename in os.listdir(workdir):
         if filename.endswith('md'):
@@ -43,23 +51,35 @@ def remove_old_posts(workdir, dryrun=False):
                     os.remove(os.path.join(workdir, filename))
 
 
-def update_new_posts(workdir, dryrun=False, username="umswc"):
+def write_upcoming_posts(repos, workdir, dryrun=False):
     """
+    :param repos: list of Github repositories
     :param workdir: directory containing workshop posts
     :param dryrun: if True, print workshops to remove without removing them
-    :param username: The GitHub username or organization name.
     :return: None
     """
-    user_swc = Github().get_user(username)
-    repos = sorted([repo for repo in user_swc.get_repos() if repo.name.split('-')[0].isnumeric()],
-                   key=lambda repo: repo.name, reverse=True)
+    print("Writing upcoming workshop posts")
     workshop = Workshop.from_repo(repos.pop(0))
     while workshop.is_upcoming:  # if workshop date is after today, add/update on website
-        print(f"Adding workshop {workshop.date}")
+        print(f"Writing workshop {workshop.date}")
         if not dryrun:
-            with open(os.path.join(workdir, f"{workshop.name}.md"), 'w') as file:
-                file.write(workshop.yaml)
+            workshop.write_markdown(workdir)
         workshop = Workshop.from_repo(repos.pop(0))
+
+
+def write_all_posts(repos, workdir, dryrun=False):
+    """
+    :param repos: list of Github repositories
+    :param workdir: directory containing workshop posts
+    :param dryrun: if True, print workshops to remove without removing them
+    :return: None
+    """
+    print("Writing all workshop posts")
+    for repo in repos:
+        workshop = Workshop.from_repo(repo)
+        print(f"Writing workshop {workshop.date}")
+        if not dryrun:
+            workshop.write_markdown(workdir)
 
 
 class Workshop:
@@ -107,6 +127,7 @@ class Workshop:
         header = {key: (value if value else '') for key, value in yaml.load(
             base64.b64decode(repo.get_contents('index.md').content).decode('utf-8').strip("'").split('---')[1],
             Loader=yaml.Loader).items()}
+        print(header['startdate'])
         return cls(name=repo.name,
                    title=f'{cls.titles[header["carpentry"]]} Workshop',
                    date=header['startdate'].strftime('%Y%m%d'),
@@ -116,6 +137,15 @@ class Workshop:
                    site=f'https://{repo.owner.login}.github.io/{repo.name}',
                    etherpad=header['collaborative_notes'],
                    eventbrite=header['eventbrite'])
+
+    def write_markdown(self, workdir):
+        """
+        Write a markdown file containing the yaml header
+        :param workdir: directory to write the file to
+        :return: None
+        """
+        with open(os.path.join(workdir, f"{self.name}.md"), 'w') as file:
+            file.write(self.yaml)
 
 
 if __name__ == "__main__":
