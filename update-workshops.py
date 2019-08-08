@@ -127,7 +127,6 @@ class Workshop:
         header = {key: (value if value else '') for key, value in yaml.load(
             base64.b64decode(repo.get_contents('index.md').content).decode('utf-8').strip("'").split('---')[1],
             Loader=yaml.Loader).items()}
-        print(header['startdate'])
         return cls(name=repo.name,
                    title=f'{cls.titles[header["carpentry"]]} Workshop',
                    date=header['startdate'].strftime('%Y%m%d'),
