@@ -7,4 +7,6 @@ helpers:
 site:
 etherpad:
 eventbrite:
+material:
+audience:
 ---

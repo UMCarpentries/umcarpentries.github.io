@@ -13,4 +13,6 @@ helpers:
 site: https://UMSWC.github.io/2019-01-07-umich-wise
 etherpad: http://pad.software-carpentry.org/2018-01-07-umich-wise
 eventbrite: 
+material: 
+audience: 
 ---

@@ -92,7 +92,7 @@ class Workshop:
               'dc': "Data Carpentry",
               'lc': "Library Carpentry"}
 
-    def __init__(self, name, title, date, end_date, instructors, helpers, site, etherpad, eventbrite):
+    def __init__(self, name, title, date, end_date, instructors, helpers, site, etherpad, eventbrite, material, audience):
         self.name = name
         self.title = title
         self.date = date
@@ -102,13 +102,15 @@ class Workshop:
         self.site = site
         self.etherpad = etherpad
         self.eventbrite = eventbrite
+        self.material = material
+        self.audience = audience
 
     @property
     def yaml(self):
         """ Format workshop attributes as YAML
         :return: YAML-formatted string of workshop attributes
         """
-        return f"---\ntitle: {self.title}\ndate: {self.date}\nend_date: {self.end_date}\ninstructors:\n{self.instructors}\nhelpers:\n{self.helpers}\nsite: {self.site}\netherpad: {self.etherpad}\neventbrite: {self.eventbrite}\n---"
+        return f"---\ntitle: {self.title}\ndate: {self.date}\nend_date: {self.end_date}\ninstructors:\n{self.instructors}\nhelpers:\n{self.helpers}\nsite: {self.site}\netherpad: {self.etherpad}\neventbrite: {self.eventbrite}\nmaterial: {self.material}\naudience: {self.audience}\n---"
 
     @property
     def is_upcoming(self):
@@ -134,7 +136,9 @@ class Workshop:
                        helpers='\n'.join("- " + name for name in header['helper']),
                        site=f'https://{repo.owner.login}.github.io/{repo.name}',
                        etherpad=header['collaborative_notes'],
-                       eventbrite=header['eventbrite'])
+                       eventbrite=header['eventbrite'],
+                       material="",
+                       audience="",)
         return workshop
 
     def write_markdown(self, workdir):

@@ -10,4 +10,6 @@ helpers:
 site: https://UMSWC.github.io/2019-03-04-umich-genomics
 etherpad: http://pad.software-carpentry.org/2019-03-04-umich-genomics
 eventbrite: 
+material: 
+audience: 
 ---
