@@ -21,7 +21,9 @@ import yaml
 
 
 def main(args):
-    """
+    """ Gather workshop repositories and update the workshop posts.
+    If the flag --write-all is used, all workshops -- past and upcoming -- will be written to posts.
+    Otherwise, old workshop posts will be removed and only upcoming workshops will be written to posts.
     :param args: command-line arguments from docopt
     """
     user_swc = Github().get_user(args['--username'])
@@ -35,7 +37,7 @@ def main(args):
 
 
 def remove_old_posts(workdir, dryrun=False):
-    """
+    """ Remove past workshops from the posts directory
     :param workdir: directory containing workshop posts
     :param dryrun: if True, print workshops to remove without removing them.
     :return: None
@@ -52,7 +54,7 @@ def remove_old_posts(workdir, dryrun=False):
 
 
 def write_upcoming_posts(repos, workdir, dryrun=False):
-    """
+    """ Write upcoming workshops to the posts directory
     :param repos: list of Github repositories
     :param workdir: directory containing workshop posts
     :param dryrun: if True, print workshops to remove without removing them
@@ -68,7 +70,7 @@ def write_upcoming_posts(repos, workdir, dryrun=False):
 
 
 def write_all_posts(repos, workdir, dryrun=False):
-    """
+    """ Write all workshops, past and upcoming, to the posts directory.
     :param repos: list of Github repositories
     :param workdir: directory containing workshop posts
     :param dryrun: if True, print workshops to remove without removing them
@@ -103,43 +105,40 @@ class Workshop:
 
     @property
     def yaml(self):
-        """
-        Format workshop attributes as YAML
+        """ Format workshop attributes as YAML
         :return: YAML-formatted string of workshop attributes
         """
         return f"---\ntitle: {self.title}\ndate: {self.date}\nend_date: {self.end_date}\ninstructors:\n{self.instructors}\nhelpers:\n{self.helpers}\nsite: {self.site}\netherpad: {self.etherpad}\neventbrite: {self.eventbrite}\n---"
 
     @property
     def is_upcoming(self):
-        """
-        Check whether the workshop end date is after today
+        """ Check whether the workshop end date is after today
         :return: True if workshop end date is after today, else False
         """
         return datetime.datetime.today() < datetime.datetime.strptime(self.end_date, '%Y%m%d')
 
     @classmethod
     def from_repo(cls, repo):
-        """
-        Create a Workshop from a Github repository
-        :param repo: a Github repository from pygithub
+        """ Create a Workshop from a Github repository
+        :param repo: a Github repository object from pygithub
         :return: a Workshop instance
         """
         header = {key: (value if value else '') for key, value in yaml.load(
             base64.b64decode(repo.get_contents('index.md').content).decode('utf-8').strip("'").split('---')[1],
             Loader=yaml.Loader).items()}
-        return cls(name=repo.name,
-                   title=f'{cls.titles[header["carpentry"]]} Workshop',
-                   date=header['startdate'].strftime('%Y%m%d'),
-                   end_date=header['enddate'].strftime('%Y%m%d'),
-                   instructors='\n'.join("- " + name for name in header['instructor']),
-                   helpers='\n'.join("- " + name for name in header['helper']),
-                   site=f'https://{repo.owner.login}.github.io/{repo.name}',
-                   etherpad=header['collaborative_notes'],
-                   eventbrite=header['eventbrite'])
+        workshop = cls(name=repo.name,
+                       title=f'{cls.titles[header["carpentry"]]} Workshop',
+                       date=header['startdate'].strftime('%Y%m%d'),
+                       end_date=header['enddate'].strftime('%Y%m%d'),
+                       instructors='\n'.join("- " + name for name in header['instructor']),
+                       helpers='\n'.join("- " + name for name in header['helper']),
+                       site=f'https://{repo.owner.login}.github.io/{repo.name}',
+                       etherpad=header['collaborative_notes'],
+                       eventbrite=header['eventbrite'])
+        return workshop
 
     def write_markdown(self, workdir):
-        """
-        Write a markdown file containing the yaml header
+        """ Write a markdown file containing the yaml header
         :param workdir: directory to write the file to
         :return: None
         """
