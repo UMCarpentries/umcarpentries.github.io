@@ -11,6 +11,6 @@ helpers:
 site: https://UMSWC.github.io/2018-12-17-umich-wrong
 etherpad: http://pad.software-carpentry.org/2018-10-09-umich
 eventbrite: 
-material: 
+material: Data organization in spreadsheets, OpenRefine, Introduction to R
 audience: 
 ---
