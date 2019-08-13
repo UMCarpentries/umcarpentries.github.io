@@ -1,7 +1,7 @@
 ---
 title: Data Carpentry Workshop
-date: 20181009
-end_date: 20181010
+date: 2018-10-09
+end_date: 2018-10-10
 instructors:
 - Nicholas Lesniak
 - Ada Hagan

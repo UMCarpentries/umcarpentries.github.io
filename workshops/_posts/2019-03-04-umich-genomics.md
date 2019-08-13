@@ -1,7 +1,7 @@
 ---
 title: Data Carpentry Workshop
-date: 20190304
-end_date: 20190305
+date: 2019-03-04
+end_date: 2019-03-05
 instructors:
 - Stephanie Thiede
 - Zena Lapp

@@ -128,8 +128,8 @@ class Workshop:
             Loader=yaml.Loader).items()}
         workshop = cls(name=repo.name,
                        title=f'{cls.titles[header["carpentry"]]} Workshop',
-                       date=header['startdate'].strftime('%Y%m%d'),
-                       end_date=header['enddate'].strftime('%Y%m%d'),
+                       date=header['startdate'].strftime('%Y-%m-%d'),
+                       end_date=header['enddate'].strftime('%Y-%m-%d'),
                        instructors='\n'.join("- " + name for name in header['instructor']),
                        helpers='\n'.join("- " + name for name in header['helper']),
                        site=f'https://{repo.owner.login}.github.io/{repo.name}',
