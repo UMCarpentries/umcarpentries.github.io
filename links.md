@@ -4,40 +4,21 @@ category: links
 title: Links
 ---
 
-### Useful links for the tools we use
+## Connect with us
 
-#### bash
-* [bash]()
+* [MCommunity email group](https://mcommunity.umich.edu/#group:Software%20Carpentry%20Updates) for updates on upcoming workshops.
+* [MCommunity email group](https://mcommunity.umich.edu/#group:UM%20Software%20Carpentry) to get involved in helping, instructing, or organizing workshops.
 
+## Other groups
 
-#### git
-* [git]()
-* [GitHub]()
+### Local organizations
+* [_DANG!_](https://um-dang.github.io/)
+* [U-M Libraries](https://www.lib.umich.edu/)
+* [MIDAS](https://midas.umich.edu/)
+* [ARC-TS](https://arc-ts.umich.edu/)
+* [Ann Arbor R Users Group](https://annarborrusergroup.github.io/)
+* [PyData Ann Arbor](https://pydataannarbor.github.io/)
 
-
-#### R
-* [R]()
-* [RStudio]()
-* [Helpful cheatsheets]()
-
-
-#### Python
-* [Python]()
-* [Jupyter]()
-
-#### SQL
-* [SQL-lite]()
-
-
-### Groups we like
-
-#### Local organizations
-* [UM Libraries]()
-* [MIDAS]()
-* [ARC]()
-* [Ann Arbor R Users Group]()
-
-#### Beyond Ann Arbor
-* [Software Carpentry]()
-* [Data Carpentry]()
-* [UC Davis group]()
+### Beyond Ann Arbor
+* [The Carpentries](https://carpentries.org/)
+* [UC Davis group](http://dsi.ucdavis.edu/tag/carpentry.html)
