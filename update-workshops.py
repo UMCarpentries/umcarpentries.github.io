@@ -18,7 +18,6 @@ import datetime
 from docopt import docopt
 from github import Github
 import os
-import pprint
 import yaml
 
 
@@ -152,7 +151,7 @@ class Workshop:
 
     @classmethod
     def get_syllabus_lessons(cls, repo, carpentry):
-        """ Get the lessons taught from the syllabus html
+        """ Get the lesson titles from the syllabus html
         :param carpentry: The Carpentry organization (swc, dc, lc)
         :param repo: Github repository corresponding to a workshop
         :return: string containing the lesson titles separated by commas
@@ -179,9 +178,6 @@ class Workshop:
         """
         with open(os.path.join(workdir, f"{self.name}.md"), 'w') as file:
             file.write(self.yaml)
-
-
-
 
 
 if __name__ == "__main__":
