@@ -1,9 +1,12 @@
 ---
 title:
-dates:
+date:
+end_date:
 instructors:
 helpers:
 site:
 etherpad:
 eventbrite:
+material:
+audience:
 ---
