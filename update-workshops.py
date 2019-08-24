@@ -124,7 +124,7 @@ class Workshop:
         """ Check whether the workshop end date is after today
         :return: True if workshop end date is after today, else False
         """
-        return datetime.datetime.today() < datetime.datetime.strptime(self.end_date, '%Y%m%d')
+        return datetime.datetime.today() < datetime.datetime.strptime(self.end_date, '%Y-%m-%d')
 
     @classmethod
     def from_repo(cls, repo):
