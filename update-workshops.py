@@ -70,7 +70,6 @@ def write_upcoming_posts(repos, workdir, dryrun=False):
     print("Writing upcoming workshop posts")
     workshop = Workshop.from_repo(repos.pop(0))
     while workshop.is_upcoming:  # if workshop date is after today, add/update on website
-        print(f"Writing workshop {workshop.date}")
         if not dryrun:
             workshop.write_markdown(workdir)
         workshop = Workshop.from_repo(repos.pop(0))
@@ -86,7 +85,6 @@ def write_all_posts(repos, workdir, dryrun=False):
     print("Writing all workshop posts")
     for repo in repos:
         workshop = Workshop.from_repo(repo)
-        print(f"Writing workshop {workshop.name}")
         if not dryrun:
             workshop.write_markdown(workdir)
 
@@ -133,7 +131,7 @@ class Workshop:
         :param repo: a Github repository object from pygithub
         :return: a Workshop instance
         """
-        print(repo.name)
+        print(f"Writing workshop from repo {repo.name}")
         header = cls.get_header(repo)
         carpentry = header['carpentry'] if 'carpentry' in header else ''
         material = cls.get_syllabus_lessons(repo, carpentry)
@@ -164,12 +162,12 @@ class Workshop:
         :param repo: Github repository corresponding to a workshop
         :return: string containing the lesson titles separated by commas
         """
-
         material = list()
         filepath = f"_includes/{'sc' if carpentry == 'swc' else carpentry}/syllabus.html"
-        # TO-DO: handle old-style workshop repos with syllabus content in index.html (e.g.
-        # https://github.com/UMSWC/2017-12-18-umich)
-        if filepath in {file.path for file in repo.get_contents("")}:
+        # TO-DO: handle old-style workshop repos with syllabus content in index.html
+        # (e.g. https://github.com/UMSWC/2017-12-18-umich)
+        content_paths = {file.path for file in repo.get_contents("_includes")}
+        if '_includes/sc' in content_paths:
             syllabus = [line.strip() for line in base64.b64decode(repo.get_contents(filepath).content).decode('utf-8').strip("'").split('\n')]
             is_comment = False
             while syllabus:
