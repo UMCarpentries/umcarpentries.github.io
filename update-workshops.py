@@ -97,7 +97,8 @@ class Workshop:
     """
     titles = {'swc': "Software Carpentry",
               'dc': "Data Carpentry",
-              'lc': "Library Carpentry"}
+              'lc': "Library Carpentry",
+              '': ''}
 
     def __init__(self, name, title, date, end_date, instructors, helpers, site, etherpad, eventbrite, material, audience):
         self.name = name
@@ -132,22 +133,29 @@ class Workshop:
         :param repo: a Github repository object from pygithub
         :return: a Workshop instance
         """
-        header = {key: (value if value else '') for key, value in yaml.load(
-            base64.b64decode(repo.get_contents('index.md').content).decode('utf-8').strip("'").split('---')[1],
-            Loader=yaml.Loader).items()}
-        material = cls.get_syllabus_lessons(repo, header['carpentry'])
+        print(repo.name)
+        header = cls.get_header(repo)
+        carpentry = header['carpentry'] if 'carpentry' in header else ''
+        material = cls.get_syllabus_lessons(repo, carpentry)
         workshop = cls(name=repo.name,
-                       title=f'{cls.titles[header["carpentry"]]} Workshop',
+                       title=f'{cls.titles[carpentry]} Workshop',
                        date=header['startdate'].strftime('%Y-%m-%d'),
                        end_date=header['enddate'].strftime('%Y-%m-%d'),
                        instructors='\n'.join("- " + name for name in header['instructor']),
                        helpers='\n'.join("- " + name for name in header['helper']),
                        site=f'https://{repo.owner.login}.github.io/{repo.name}',
-                       etherpad=header['collaborative_notes'],
+                       etherpad=header['collaborative_notes'] if 'collaborative_notes' in header else header['etherpad'],
                        eventbrite=header['eventbrite'],
                        material=material,
                        audience="",)
         return workshop
+
+    @classmethod
+    def get_header(cls, repo):
+        repo_contents = [file for file in repo.get_contents("") if file.path in {"index.md", "index.html"}]  # index could be markdown or html
+        index_file = repo_contents.pop()
+        header = {key: (value if value else '') for key, value in yaml.load( base64.b64decode(index_file.content).decode('utf-8').strip("'").split('---')[1], Loader=yaml.Loader).items()}
+        return header
 
     @classmethod
     def get_syllabus_lessons(cls, repo, carpentry):
@@ -156,19 +164,23 @@ class Workshop:
         :param repo: Github repository corresponding to a workshop
         :return: string containing the lesson titles separated by commas
         """
-        filepath = f"_includes/{'sc' if carpentry == 'swc' else carpentry}/syllabus.html"
-        syllabus = [line.strip() for line in base64.b64decode(repo.get_contents(filepath).content).decode('utf-8').strip("'").split('\n')]
+
         material = list()
-        is_comment = False
-        while syllabus:
-            line = syllabus.pop(0)
-            if line.startswith('<!--'):
-                is_comment = True
-            elif line.endswith('-->'):
-                is_comment = False
-            elif not is_comment and line.startswith('<h3'):
-                lesson = line.split('>')[1].split('</')[0].strip() if "href" not in line else line.split('>')[2].split('</')[0].strip()
-                material.append(lesson)
+        filepath = f"_includes/{'sc' if carpentry == 'swc' else carpentry}/syllabus.html"
+        # TO-DO: handle old-style workshop repos with syllabus content in index.html (e.g.
+        # https://github.com/UMSWC/2017-12-18-umich)
+        if filepath in {file.path for file in repo.get_contents("")}:
+            syllabus = [line.strip() for line in base64.b64decode(repo.get_contents(filepath).content).decode('utf-8').strip("'").split('\n')]
+            is_comment = False
+            while syllabus:
+                line = syllabus.pop(0)
+                if line.startswith('<!--'):
+                    is_comment = True
+                elif line.endswith('-->'):
+                    is_comment = False
+                elif not is_comment and line.startswith('<h3'):
+                    lesson = line.split('>')[1].split('</')[0].strip() if "href" not in line else line.split('>')[2].split('</')[0].strip()
+                    material.append(lesson)
         return ', '.join(material)
 
     def write_markdown(self, workdir):
