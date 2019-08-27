@@ -18,4 +18,3 @@ I'm a microbial ecology postdoc working in Pat Schloss's lab at the University o
 My path to learning computational tools and bioinformatics started in grad school, where I took a class that covered the UNIX shell and a collection of several common bioinofrmatics tools. Since then, I've expanded my experience mostly through small workshops and by teaching myself.
 
 When I'm not in the lab I enjoy reading, writing, and building models. I'm actually using some of the skills I've learned in the Carpentries to add light and sound to models with Arduino boards!
-ProTip! Use n and p to navigate betw
