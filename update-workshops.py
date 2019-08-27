@@ -2,12 +2,12 @@
 
 Usage:
     update-workshops.py -h | --help
-    update-workshops.py [--dryrun --write-all --workdir=<workdir> --username=<username> --tokenpath=<tokenpath>]
+    update-workshops.py [--dryrun --remove-old --workdir=<workdir> --username=<username> --tokenpath=<tokenpath>]
 
 Options:
     -h --help                       Display this help message.
     -d --dryrun                     Print posts to be added and removed without doing it.
-    -a --write-all                  Write all workshop posts, both past and upcoming.
+    -a --remove-old                 Remove past workshop posts and only add upcoming ones.
     -w --workdir=<workdir>          Directory containing workshop posts. [default: workshops/_posts]
     -u --username=<username>        The GitHub username or organization name. [default: umswc]
     -u --tokenpath=<tokenpath>      The path to a text file containing a Github authorization token
@@ -23,8 +23,8 @@ import yaml
 
 def main(args):
     """ Gather workshop repositories and update the workshop posts.
-    If the flag --write-all is used, all workshops -- past and upcoming -- will be written to posts.
-    Otherwise, old workshop posts will be removed and only upcoming workshops will be written to posts.
+    By default, all workshops (past and upcoming) will be written to posts.
+    If the flag --remove-old is used, old workshop posts will be removed and only upcoming workshops will be written to posts.
     :param args: command-line arguments from docopt
     """
     if args['--tokenpath']:
@@ -36,11 +36,11 @@ def main(args):
     user_swc = github.get_user(args['--username'])
     repos = sorted([repo for repo in user_swc.get_repos() if repo.name.split('-')[0].isnumeric()],
                    key=lambda repo: repo.name, reverse=True)
-    if args['--write-all']:
-        write_all_posts(repos, args['--workdir'], dryrun=args['--dryrun'])
-    else:
+    if args['--remove-old']:
         remove_old_posts(args['--workdir'], dryrun=args['--dryrun'])
         write_upcoming_posts(repos, args['--workdir'], dryrun=args['--dryrun'])
+    else:
+        write_all_posts(repos, args['--workdir'], dryrun=args['--dryrun'])
 
 
 def remove_old_posts(workdir, dryrun=False):
