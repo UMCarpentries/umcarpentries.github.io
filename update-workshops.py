@@ -10,7 +10,7 @@ Options:
     -a --remove-old                 Remove past workshop posts and only add upcoming ones.
     -w --workdir=<workdir>          Directory containing workshop posts. [default: workshops/_posts]
     -u --username=<username>        The GitHub username or organization name. [default: umswc]
-    -u --tokenpath=<tokenpath>      The path to a text file containing a Github authorization token
+    -t --tokenpath=<tokenpath>      The path to a text file containing a Github authorization token
 """
 
 import base64
