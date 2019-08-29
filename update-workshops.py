@@ -137,10 +137,10 @@ class Workshop:
         material = cls.get_syllabus_lessons(repo, carpentry)
         workshop = cls(name=repo.name,
                        title=f'{cls.titles[carpentry]} Workshop',
-                       date=header['startdate'].strftime('%Y-%m-%d'),
-                       end_date=header['enddate'].strftime('%Y-%m-%d'),
-                       instructors='\n'.join("- " + name for name in header['instructor']),
-                       helpers='\n'.join("- " + name for name in header['helper']),
+                       date=format_date(header['startdate']),
+                       end_date=format_date(header['enddate']),
+                       instructors=join_list(header['instructor']),
+                       helpers=join_list(header['helper']),
                        site=f'https://{repo.owner.login}.github.io/{repo.name}',
                        etherpad=header['collaborative_notes'] if 'collaborative_notes' in header else header['etherpad'],
                        eventbrite=header['eventbrite'],
@@ -150,7 +150,14 @@ class Workshop:
 
     @classmethod
     def get_header(cls, repo):
-        repo_contents = [file for file in repo.get_contents("") if file.path in {"index.md", "index.html"}]  # index could be markdown or html
+        """
+        Get the YAML header from the index file
+        :param repo: Github repository corresponding to a workshop
+        :return: dictionary
+        """
+        repo_contents = [file for file in repo.get_contents("", ref="gh-pages") if file.path in {"index.md",
+                                                                                             "index.html"}]  #
+        # index could be markdown or html
         index_file = repo_contents.pop()
         header = {key: (value if value else '') for key, value in yaml.load( base64.b64decode(index_file.content).decode('utf-8').strip("'").split('---')[1], Loader=yaml.Loader).items()}
         return header
@@ -166,9 +173,11 @@ class Workshop:
         filepath = f"_includes/{'sc' if carpentry == 'swc' else carpentry}/syllabus.html"
         # TO-DO: handle old-style workshop repos with syllabus content in index.html
         # (e.g. https://github.com/UMSWC/2017-12-18-umich)
-        content_paths = {file.path for file in repo.get_contents("_includes")}
+        content_paths = {file.path for file in repo.get_contents("_includes", ref="gh-pages")}
         if '_includes/sc' in content_paths:
-            syllabus = [line.strip() for line in base64.b64decode(repo.get_contents(filepath).content).decode('utf-8').strip("'").split('\n')]
+            syllabus = [line.strip() for line in base64.b64decode(repo.get_contents(filepath,
+                                                                                     ref="gh-pages").content).decode(
+                'utf-8').strip("'").split('\n')]
             is_comment = False
             while syllabus:
                 line = syllabus.pop(0)
@@ -188,6 +197,23 @@ class Workshop:
         """
         with open(os.path.join(workdir, f"{self.name}.md"), 'w') as file:
             file.write(self.yaml)
+
+
+def format_date(date):
+    """ Format a datetime.date object in ISO 8601 format.
+    If the date given is not a datetime.date object, it returns the object but type-casted as a string.
+    :param date: a datetime.date object
+    :return: a string in ISO 8601 format
+    """
+    return date.strftime('%Y-%m-%d') if type(date) == date else str(date)
+
+
+def join_list(this_list):
+    """ Join the elements of a list into a string of items separated by hyphens & newlines.
+    :param this_list: a list
+    :return: a string of the list items separated by hyphens & newlines.
+    """
+    return '\n'.join(f"- {thing}" for thing in this_list)
 
 
 if __name__ == "__main__":
