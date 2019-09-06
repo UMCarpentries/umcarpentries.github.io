@@ -23,11 +23,12 @@ Update the workshops page:
 python update-workshops.py
 ```
 
+By default, all workshops -- past & upcoming -- will be included.
+If a workshop post already exists, it will be overwritten with content from the repository.
+
+Alternatively, you can display only upcoming workshops using the `--remove-old` flag.
 Workshops with a start date before today (the day you run the script) will be removed from the page;
 workshops with a start date after today will be added using information from the repo's `index.md` file.
-If an upcoming workshop post exists, it will be overwritten with content from the repository.
-
-Alternatively, you can display all workshop posts -- past & upcoming -- using the `--write-all` flag:
 ```
 python update-workshops.py --write-all
 ```

@@ -1,7 +1,7 @@
 ---
 title: Software Carpentry Workshop
-date: 2018-12-17
-end_date: 2018-12-18
+date: 2018-01-07
+end_date: 2018-01-07
 instructors:
 - Stephanie Thiede
 - Ada Hagan

@@ -14,6 +14,6 @@ phone: (734)615-5005
 status: current
 ---
 
-Data Management, Reproducible Science, Remote Sensing, Landscape Ecology, Invasive Species Ecology
+Data Management, Data Sharing, Reproducible Science, Remote Sensing, Landscape Ecology, Invasive Species Ecology
 
 kids, soccer, bikes, triathlon, kids

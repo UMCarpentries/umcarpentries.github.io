@@ -2,15 +2,15 @@
 
 Usage:
     update-workshops.py -h | --help
-    update-workshops.py [--dryrun --write-all --workdir=<workdir> --username=<username> --tokenpath=<tokenpath>]
+    update-workshops.py [--dryrun --remove-old --workdir=<workdir> --username=<username> --tokenpath=<tokenpath>]
 
 Options:
     -h --help                       Display this help message.
     -d --dryrun                     Print posts to be added and removed without doing it.
-    -a --write-all                  Write all workshop posts, both past and upcoming.
+    -a --remove-old                 Remove past workshop posts and only add upcoming ones.
     -w --workdir=<workdir>          Directory containing workshop posts. [default: workshops/_posts]
     -u --username=<username>        The GitHub username or organization name. [default: umswc]
-    -u --tokenpath=<tokenpath>      The path to a text file containing a Github authorization token
+    -t --tokenpath=<tokenpath>      The path to a text file containing a Github authorization token
 """
 
 import base64
@@ -23,8 +23,8 @@ import yaml
 
 def main(args):
     """ Gather workshop repositories and update the workshop posts.
-    If the flag --write-all is used, all workshops -- past and upcoming -- will be written to posts.
-    Otherwise, old workshop posts will be removed and only upcoming workshops will be written to posts.
+    By default, all workshops (past and upcoming) will be written to posts.
+    If the flag --remove-old is used, old workshop posts will be removed and only upcoming workshops will be written to posts.
     :param args: command-line arguments from docopt
     """
     if args['--tokenpath']:
@@ -36,11 +36,11 @@ def main(args):
     user_swc = github.get_user(args['--username'])
     repos = sorted([repo for repo in user_swc.get_repos() if repo.name.split('-')[0].isnumeric()],
                    key=lambda repo: repo.name, reverse=True)
-    if args['--write-all']:
-        write_all_posts(repos, args['--workdir'], dryrun=args['--dryrun'])
-    else:
+    if args['--remove-old']:
         remove_old_posts(args['--workdir'], dryrun=args['--dryrun'])
         write_upcoming_posts(repos, args['--workdir'], dryrun=args['--dryrun'])
+    else:
+        write_all_posts(repos, args['--workdir'], dryrun=args['--dryrun'])
 
 
 def remove_old_posts(workdir, dryrun=False):
@@ -70,7 +70,6 @@ def write_upcoming_posts(repos, workdir, dryrun=False):
     print("Writing upcoming workshop posts")
     workshop = Workshop.from_repo(repos.pop(0))
     while workshop.is_upcoming:  # if workshop date is after today, add/update on website
-        print(f"Writing workshop {workshop.date}")
         if not dryrun:
             workshop.write_markdown(workdir)
         workshop = Workshop.from_repo(repos.pop(0))
@@ -86,7 +85,6 @@ def write_all_posts(repos, workdir, dryrun=False):
     print("Writing all workshop posts")
     for repo in repos:
         workshop = Workshop.from_repo(repo)
-        print(f"Writing workshop {workshop.name}")
         if not dryrun:
             workshop.write_markdown(workdir)
 
@@ -97,7 +95,8 @@ class Workshop:
     """
     titles = {'swc': "Software Carpentry",
               'dc': "Data Carpentry",
-              'lc': "Library Carpentry"}
+              'lc': "Library Carpentry",
+              '': ''}
 
     def __init__(self, name, title, date, end_date, instructors, helpers, site, etherpad, eventbrite, material, audience):
         self.name = name
@@ -132,22 +131,36 @@ class Workshop:
         :param repo: a Github repository object from pygithub
         :return: a Workshop instance
         """
-        header = {key: (value if value else '') for key, value in yaml.load(
-            base64.b64decode(repo.get_contents('index.md').content).decode('utf-8').strip("'").split('---')[1],
-            Loader=yaml.Loader).items()}
-        material = cls.get_syllabus_lessons(repo, header['carpentry'])
+        print(f"Writing workshop from repo {repo.name}")
+        header = cls.get_header(repo)
+        carpentry = header['carpentry'] if 'carpentry' in header else ''
+        material = cls.get_syllabus_lessons(repo, carpentry)
         workshop = cls(name=repo.name,
-                       title=f'{cls.titles[header["carpentry"]]} Workshop',
-                       date=header['startdate'].strftime('%Y-%m-%d'),
-                       end_date=header['enddate'].strftime('%Y-%m-%d'),
-                       instructors='\n'.join("- " + name for name in header['instructor']),
-                       helpers='\n'.join("- " + name for name in header['helper']),
+                       title=f'{cls.titles[carpentry]} Workshop',
+                       date=format_date(header['startdate']),
+                       end_date=format_date(header['enddate']),
+                       instructors=join_list(header['instructor']),
+                       helpers=join_list(header['helper']),
                        site=f'https://{repo.owner.login}.github.io/{repo.name}',
-                       etherpad=header['collaborative_notes'],
+                       etherpad=header['collaborative_notes'] if 'collaborative_notes' in header else header['etherpad'],
                        eventbrite=header['eventbrite'],
                        material=material,
                        audience="",)
         return workshop
+
+    @classmethod
+    def get_header(cls, repo):
+        """
+        Get the YAML header from the index file
+        :param repo: Github repository corresponding to a workshop
+        :return: dictionary
+        """
+        repo_contents = [file for file in repo.get_contents("", ref="gh-pages") if file.path in {"index.md",
+                                                                                             "index.html"}]  #
+        # index could be markdown or html
+        index_file = repo_contents.pop()
+        header = {key: (value if value else '') for key, value in yaml.load( base64.b64decode(index_file.content).decode('utf-8').strip("'").split('---')[1], Loader=yaml.Loader).items()}
+        return header
 
     @classmethod
     def get_syllabus_lessons(cls, repo, carpentry):
@@ -156,19 +169,25 @@ class Workshop:
         :param repo: Github repository corresponding to a workshop
         :return: string containing the lesson titles separated by commas
         """
-        filepath = f"_includes/{'sc' if carpentry == 'swc' else carpentry}/syllabus.html"
-        syllabus = [line.strip() for line in base64.b64decode(repo.get_contents(filepath).content).decode('utf-8').strip("'").split('\n')]
         material = list()
-        is_comment = False
-        while syllabus:
-            line = syllabus.pop(0)
-            if line.startswith('<!--'):
-                is_comment = True
-            elif line.endswith('-->'):
-                is_comment = False
-            elif not is_comment and line.startswith('<h3'):
-                lesson = line.split('>')[1].split('</')[0].strip() if "href" not in line else line.split('>')[2].split('</')[0].strip()
-                material.append(lesson)
+        filepath = f"_includes/{'sc' if carpentry == 'swc' else carpentry}/syllabus.html"
+        # TO-DO: handle old-style workshop repos with syllabus content in index.html
+        # (e.g. https://github.com/UMSWC/2017-12-18-umich)
+        content_paths = {file.path for file in repo.get_contents("_includes", ref="gh-pages")}
+        if '_includes/sc' in content_paths:
+            syllabus = [line.strip() for line in base64.b64decode(repo.get_contents(filepath,
+                                                                                     ref="gh-pages").content).decode(
+                'utf-8').strip("'").split('\n')]
+            is_comment = False
+            while syllabus:
+                line = syllabus.pop(0)
+                if line.startswith('<!--'):
+                    is_comment = True
+                elif line.endswith('-->'):
+                    is_comment = False
+                elif not is_comment and line.startswith('<h3'):
+                    lesson = line.split('>')[1].split('</')[0].strip() if "href" not in line else line.split('>')[2].split('</')[0].strip()
+                    material.append(lesson)
         return ', '.join(material)
 
     def write_markdown(self, workdir):
@@ -178,6 +197,23 @@ class Workshop:
         """
         with open(os.path.join(workdir, f"{self.name}.md"), 'w') as file:
             file.write(self.yaml)
+
+
+def format_date(date):
+    """ Format a datetime.date object in ISO 8601 format.
+    If the date given is not a datetime.date object, it returns the object but type-casted as a string.
+    :param date: a datetime.date object
+    :return: a string in ISO 8601 format
+    """
+    return date.strftime('%Y-%m-%d') if type(date) == date else str(date)
+
+
+def join_list(this_list):
+    """ Join the elements of a list into a string of items separated by hyphens & newlines.
+    :param this_list: a list
+    :return: a string of the list items separated by hyphens & newlines.
+    """
+    return '\n'.join(f"- {thing}" for thing in this_list)
 
 
 if __name__ == "__main__":
