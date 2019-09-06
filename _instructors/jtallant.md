@@ -1,7 +1,7 @@
 ---
 layout: instructors
 title: Jason Tallant
-picture: /assets/img/jtallant.jpg
+picture: /assets/img/jtallant.jpeg
 twitter: UMBSData
 github:
 email: jtallant@umich.edu
