@@ -170,10 +170,10 @@ class Workshop:
                                                                                              "index.html"}]  #
         # index could be markdown or html. expect only one
         index_file = repo_contents.pop()
-        header = {key: (value if value else '') for key, value in yaml.load( base64.b64decode(index_file.content).decode('utf-8').strip("'").split('---')[1], Loader=yaml.Loader).items()}
+        header = {key: (value if value else '') for key, value in yaml.load(decode_gh_file(index_file).split('---')[1], Loader=yaml.Loader).items()}
         if 'carpentry' not in header: # new template has 'carpentry' field in _config.yaml only, not index.md
             config_file = repo.get_contents("_config.yml", ref="gh-pages")
-            config_dict = yaml.load(base64.b64decode(config_file.content).decode('utf-8'), Loader=yaml.Loader)
+            config_dict = yaml.load(decode_gh_file(config_file), Loader=yaml.Loader)
             if 'carpentry' in config_dict:
                 header['carpentry'] = config_dict['carpentry']
 
@@ -188,21 +188,21 @@ class Workshop:
         """
         material = list()
         includes_dir = "_includes"
+        syllabus_filename = "syllabus.html"
+        index_filename = "index.html"
         content_paths = {file.path for file in repo.get_contents(includes_dir, ref="gh-pages")}
-        # TO-DO: handle old-style workshop repos with syllabus content in index.html
-        # (e.g. https://github.com/UMSWC/2017-12-18-umich)
-        if f"{includes_dir}/{carpentry}" in content_paths:
-            filepath = f"{includes_dir}/{carpentry}/syllabus.html"
+        # pick correct syllabus path
+        if f"{includes_dir}/{carpentry}" in content_paths:  # TODO: upgrade to python=3.8 and use walrus operator
+            filepath = f"{includes_dir}/{carpentry}/{syllabus_filename}"
         elif carpentry == "swc" and f"{includes_dir}/sc" in content_paths:
-            # previous abbr for 'swc' dir was 'sc'; need to handle both
-            filepath = f"{includes_dir}/sc/syllabus.html"
-        else:
+            # previous abbr for 'swc' dir was 'sc'; handle both versions
+            filepath = f"{includes_dir}/sc/{syllabus_filename}"
+        else: # TODO: handle old-style workshop repos with syllabus content in index.html
+            #filepath = index_filename
             filepath = None
         # only get syllabus if the file could be found
-        if filepath:
-            syllabus = [line.strip() for line in base64.b64decode(repo.get_contents(filepath,
-                                                                                     ref="gh-pages").content).decode(
-                'utf-8').strip("'").split('\n')]
+        if filepath and syllabus_filename in filepath:
+            syllabus = [line.strip() for line in decode_gh_file(repo.get_contents(filepath, ref="gh-pages")).split('\n')]
             is_comment = False
             while syllabus:
                 line = syllabus.pop(0)
@@ -239,6 +239,9 @@ def join_list(this_list):
     :return: a string of the list items separated by hyphens & newlines.
     """
     return '\n'.join(f"- {thing}" for thing in this_list)
+
+def decode_gh_file(gh_file):
+    return base64.b64decode(gh_file.content).decode('utf-8').strip("'")
 
 if __name__ == "__main__":
     main(docopt(__doc__))
