@@ -2,7 +2,7 @@
 
 Usage:
     update-workshops.py -h | --help
-    update-workshops.py [--dryrun --remove-old --workdir=<workdir> --username=<username> --tokenpath=<tokenpath>]
+    update-workshops.py [--dryrun --remove-old --workdir=<workdir> --username=<username> --token=<token>]
 
 Options:
     -h --help                       Display this help message.
@@ -10,7 +10,7 @@ Options:
     -a --remove-old                 Remove past workshop posts and only add upcoming ones.
     -w --workdir=<workdir>          Directory containing workshop posts. [default: workshops/_posts]
     -u --username=<username>        The GitHub username or organization name. [default: umswc]
-    -t --tokenpath=<tokenpath>      The path to a text file containing a Github authorization token
+    -t --token=<token>              Github authorization token
 """
 
 import base64
@@ -27,10 +27,8 @@ def main(args):
     If the flag --remove-old is used, old workshop posts will be removed and only upcoming workshops will be written to posts.
     :param args: command-line arguments from docopt
     """
-    if args['--tokenpath']:
-        with open(args['--tokenpath'], 'r') as token_file:
-            token = token_file.readline().strip()
-        github = Github(token)
+    if args['--token']:
+        github = Github(args['--token'])
     else:
         github = Github()
     user_swc = github.get_user(args['--username'])
