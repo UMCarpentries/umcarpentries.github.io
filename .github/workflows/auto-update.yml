@@ -1,7 +1,9 @@
 name: auto-update
 
 on:
-  push
+  push:
+    branches:
+      - auto-update
 
 jobs:
   update:
