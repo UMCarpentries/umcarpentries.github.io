@@ -1,8 +1,7 @@
 name: auto-update
 
 on:
-  schedule:
-    - cron: '0 5 * * 1'
+  push
 
 jobs:
   update:
@@ -19,10 +18,10 @@ jobs:
         shell: bash -l {0}
         run: |
           python update-workshops.py --token ${{ secrets.GITHUB_TOKEN }}
-          git status
           git add .
           git config --local user.email "noreply@github.com"
           git config --local user.name "GitHub"
+          git status
           git diff-index --quiet HEAD \
           || git commit \
           --author="github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>" \
