@@ -10,6 +10,7 @@ After creating a workshop repository and filling in the required information in 
 Then you can update the workshops listed on the website by running the [`update-workshops`](update-workshops.py) script from the website repo's working directory.
 
 Dependences are listed in [`environment.yml`](environment.yml).
+Minimally, you'll need `python 3.7`, `pygithub`, `pyyaml`, & `docopt`.
 You can install them with your preferred package manager, or use [conda](https://docs.conda.io/en/latest/miniconda.html):
 
 ```
