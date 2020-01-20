@@ -32,8 +32,13 @@ def main(args):
     else:
         github = Github()
     user_swc = github.get_user(args['--username'])
-    repos = sorted([repo for repo in user_swc.get_repos() if repo.name.split('-')[0].isnumeric()],
-                   key=lambda repo: repo.name, reverse=True)
+    website_repo_updated_at = user_swc.get_repo(f"{args['--username']}.github.io").updated_at
+    repos = sorted([repo
+                    for repo in user_swc.get_repos()
+                    if repo.name.split('-')[0].isnumeric()
+                    and repo.updated_at > website_repo_updated_at
+                    ],
+                    key=lambda repo: repo.name, reverse=True)
     if args['--remove-old']:
         remove_old_posts(args['--workdir'], dryrun=args['--dryrun'])
         write_upcoming_posts(repos, args['--workdir'], dryrun=args['--dryrun'])
