@@ -18,10 +18,11 @@ conda env create -f env.yaml
 conda activate umswc
 ```
 
-Update the workshops page:
+Update the workshops page with
 ```
-python update-workshops.py
+python update-workshops.py --token $(cat .token)
 ```
+where `.token` is a plain text file containing a [GitHub access token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line).
 
 By default, all workshops -- past & upcoming -- will be included.
 If a workshop post already exists, it will be overwritten with content from the repository.
