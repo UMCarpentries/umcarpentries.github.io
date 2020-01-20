@@ -1,7 +1,8 @@
 name: auto-update
 
 on:
-- push
+  schedule:
+    - cron: '0 5 * * 1'
 
 jobs:
   update:
