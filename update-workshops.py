@@ -202,8 +202,7 @@ class Workshop:
         if filepath and syllabus_filename in filepath:
             syllabus = [line.strip() for line in decode_gh_file(repo.get_contents(filepath, ref="gh-pages")).split('\n')]
             is_comment = False
-            while syllabus:
-                line = syllabus.pop(0)
+            for line in syllabus:
                 if line.startswith('<!--'):
                     is_comment = True
                 elif line.endswith('-->'):
