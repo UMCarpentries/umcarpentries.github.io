@@ -3,42 +3,14 @@ channels:
   - conda-forge
   - bioconda
   - defaults
-  - r
 dependencies:
-  - asn1crypto=0.24.0=py37_1003
-  - bzip2=1.0.8=h01d97ff_0
-  - ca-certificates=2019.6.16=hecc5488_0
-  - certifi=2019.6.16=py37_1
-  - cffi=1.12.3=py37hccf1714_0
-  - chardet=3.0.4=py37_1003
-  - cryptography=2.7=py37h212c5bf_0
-  - deprecated=1.2.5=py_0
-  - docopt=0.6.2=py_1
-  - idna=2.8=py37_1000
-  - libcxx=8.0.0=4
-  - libcxxabi=8.0.0=4
-  - libffi=3.2.1=h6de7cb9_1006
-  - ncurses=6.1=h0a44026_1002
-  - openssl=1.1.1c=h01d97ff_0
-  - pip=19.2.1=py37_0
-  - pycparser=2.19=py37_1
-  - pygithub=1.43.6=py37_0
-  - pyjwt=1.7.1=py_0
-  - pyopenssl=19.0.0=py37_0
-  - pysocks=1.7.0=py37_0
-  - python=3.7.3=h93065d6_1
-  - pyyaml=5.1.1=py37h01d97ff_0
-  - readline=8.0=hcfe32e1_0
-  - requests=2.22.0=py37_1
-  - setuptools=41.0.1=py37_0
-  - six=1.12.0=py37_1000
-  - sqlite=3.29.0=hb7d70f7_0
-  - tk=8.6.9=h2573ce8_1002
-  - urllib3=1.25.3=py37_0
-  - wheel=0.33.4=py37_0
-  - wrapt=1.11.2=py37h01d97ff_0
-  - xz=5.2.4=h1de35cc_1001
-  - yaml=0.1.7=h1de35cc_1001
-  - zlib=1.2.11=h01d97ff_1005
-prefix: /Users/kelly/miniconda3/envs/umswc
+  - docopt=0.6.2
+  - pip=19.2.1
+  - pygithub=1.43.6
+  - python=3.7.3
+  - pyyaml=5.1.1
+  - readline=8.0
+  - requests=2.22.0
+  - setuptools=41.0.1
+  - yaml=0.1.7
 
