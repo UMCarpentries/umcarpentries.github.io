@@ -10,6 +10,7 @@ helpers:
 - Cynthia Zajac
 - Dana King
 - Tianyu Jiang
+- Emily Benedict
 site: https://UMSWC.github.io/2020-03-02-umich-genomics
 etherpad: http://pad.software-carpentry.org/2020-03-02-umich-genomics
 eventbrite: 
