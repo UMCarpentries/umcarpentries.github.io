@@ -4,6 +4,10 @@ category: links
 title: Links
 ---
 
+## Code of Conduct
+
+* All learners, instructors, and other participants in the U-M Carpentries community are expected to adhere to the [Code of Conduct](https://docs.carpentries.org/topic_folders/policies/code-of-conduct.html).
+
 ## Connect with us
 
 * [MCommunity email group](https://mcommunity.umich.edu/#group:Software%20Carpentry%20Updates) for updates on upcoming workshops.
