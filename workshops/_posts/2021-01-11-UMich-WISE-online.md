@@ -1,7 +1,7 @@
 ---
 title: Software Carpentry Workshop
-date: 2020-01-11
-end_date: 2020-01-12
+date: 2021-01-11
+end_date: 2021-01-12
 instructors:
 - Kelly Sovacool
 - Zena Lapp
