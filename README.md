@@ -1,7 +1,7 @@
 README
 ====================
 
-The [website](https://umswc.github.io) for the University of Michigan chapter of Software and Data Carpentry
+The [website](https://UMCarpentries.github.io) for the University of Michigan chapter of Software and Data Carpentry
 
 
 ## Updating the workshops page
@@ -14,14 +14,14 @@ Minimally, you'll need `python 3.7`, `pygithub`, `pyyaml`, & `docopt`.
 You can install them with your preferred package manager, or use [conda](https://docs.conda.io/en/latest/miniconda.html):
 
 ```
-cd umswc.github.io
+cd UMCarpentries.github.io
 conda env create -f environment.yml
-conda activate umswc
+conda activate umcarp
 ```
 
 Update the workshops page with
 ```
-python update-workshops.py --token $(cat .token)
+python workshops.py --token $(cat .token)
 ```
 where `.token` is a plain text file containing a [GitHub access token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line).
 
@@ -32,12 +32,12 @@ Alternatively, you can display only upcoming workshops using the `--remove-old` 
 Workshops with a start date before today (the day you run the script) will be removed from the page;
 workshops with a start date after today will be added using information from the repo's `index.md` file.
 ```
-python update-workshops.py --remove-old
+python workshops.py --remove-old
 ```
 
 Make sure you're happy with the changes in [`workshops/_posts`](workshops/_posts), then commit & push them to make the changes go live.
 
 View available command-line options with the help flag:
 ```
-python update-workshops.py --help
+python workshops.py --help
 ```
