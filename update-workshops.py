@@ -2,15 +2,17 @@
 
 Usage:
     update-workshops.py -h | --help
-    update-workshops.py [--dryrun --remove-old --workdir=<workdir> --username=<username> --token=<token>]
+    update-workshops.py [--dryrun --remove-old --workdir=<workdir> --username=<username> --token=<token> --file=<file>]
 
 Options:
     -h --help                       Display this help message.
     -d --dryrun                     Print posts to be added and removed without doing it.
     -a --remove-old                 Remove past workshop posts and only add upcoming ones.
     -w --workdir=<workdir>          Directory containing workshop posts. [default: workshops/_posts]
-    -u --username=<username>        The GitHub username or organization name. [default: umswc]
+    -u --username=<username>        The GitHub username or organization name. [default: UMCarpentries]
     -t --token=<token>              Github authorization token
+    -f --file=<file>                File containing last updated date in `%Y-%m-%d %H:%M:%S` format [default: workshops/last_updated_at.txt]
+
 """
 
 import base64
@@ -32,15 +34,14 @@ def main(args):
     else:
         github = Github()
     user_swc = github.get_user(args["--username"])
-    website_repo_updated_at = user_swc.get_repo(
-        f"{args['--username']}.github.io"
-    ).updated_at
+    with open(args['--file'], 'r') as file:
+        website_list_updated_at = datetime.datetime.strptime(file.read().strip(), "%Y-%m-%d %H:%M:%S")
     repos = sorted(
         [
             repo
             for repo in user_swc.get_repos()
             if repo.name.split("-")[0].isnumeric()
-            and repo.updated_at > website_repo_updated_at
+            and repo.updated_at > website_list_updated_at
         ],
         key=lambda repo: repo.name,
         reverse=True,
@@ -50,7 +51,8 @@ def main(args):
         write_upcoming_posts(repos, args["--workdir"], dryrun=args["--dryrun"])
     else:
         write_all_posts(repos, args["--workdir"], dryrun=args["--dryrun"])
-
+    with open(args['--file'], 'w') as file:
+        file.write(datetime.datetime.today().strftime('%Y-%m-%d %H:%M:%S'))
 
 def test():
     """ Get repos for testing interactively
@@ -59,7 +61,7 @@ def test():
     with open(".token", "r") as token_file:
         token = token_file.readline().strip()
     github = Github(token)
-    user_swc = github.get_user("umswc")
+    user_swc = github.get_user("UMCarpentries")
     return sorted(
         [repo for repo in user_swc.get_repos() if repo.name.split("-")[0].isnumeric()],
         key=lambda repo: repo.name,
@@ -177,10 +179,10 @@ class Workshop:
         :param repo: a Github repository object from pygithub
         :return: a Workshop instance
         """
-        print(f"Writing workshop from repo {repo.name}")
+        print(f"Getting workshop details from repo {repo.name}")
         header = cls.get_header(repo)
         carpentry = header["carpentry"] if "carpentry" in header else ""
-        material = cls.get_syllabus_lessons(repo, carpentry)
+        material = header['material'] if 'material' in header and header['material'] else cls.get_syllabus_lessons(repo, carpentry)
         workshop = cls(
             name=repo.name,
             title=f"{cls.titles[carpentry]} Workshop",
@@ -236,25 +238,12 @@ class Workshop:
         :return: string containing the lesson titles separated by commas
         """
         material = list()
-        includes_dir = "_includes"
-        syllabus_filename = "syllabus.html"
-        index_filename = "index.html"
-        content_paths = {
-            file.path for file in repo.get_contents(includes_dir, ref="gh-pages")
+        syllabus_filename = f'_includes/{carpentry}syllabus.html'
+        includes_dir = {
+            file.path for file in repo.get_contents(f'_includes/{carpentry}', ref="gh-pages")
         }
-        # pick correct syllabus path
-        if (
-            f"{includes_dir}/{carpentry}" in content_paths
-        ):  # TODO: upgrade to python=3.8 and use walrus operator
-            filepath = f"{includes_dir}/{carpentry}/{syllabus_filename}"
-        elif carpentry == "swc" and f"{includes_dir}/sc" in content_paths:
-            # previous abbr for 'swc' dir was 'sc'; handle both versions
-            filepath = f"{includes_dir}/sc/{syllabus_filename}"
-        else:  # TODO: handle old-style workshop repos with syllabus content in index.html
-            # filepath = index_filename
-            filepath = None
         # only get syllabus if the file could be found
-        if filepath and syllabus_filename in filepath:
+        if syllabus_filename in includes_dir:
             syllabus = [
                 line.strip()
                 for line in decode_gh_file(
