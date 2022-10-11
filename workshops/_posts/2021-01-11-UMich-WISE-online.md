@@ -14,7 +14,7 @@ helpers:
 - Sarah Lucas
 - Shelly Johnson
 - Catherine Barnier
-site: https://UMSWC.github.io/2021-01-11-UMich-WISE-online
+site: https://UMCarpentries.github.io/2021-01-11-UMich-WISE-online
 etherpad: https://pad.carpentries.org/2021-01-11-UMich-WISE-online
 eventbrite: 
 material: R for Plotting, The Unix Shell, Intro to git & GitHub, R for Data Analysis, Writing Reports with R Markdown

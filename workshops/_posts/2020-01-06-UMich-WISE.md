@@ -11,7 +11,7 @@ helpers:
 - Emily Benedict
 - Lisa Abernathy Close
 - Catherine Barnier
-site: https://UMSWC.github.io/2020-01-06-UMich-WISE
+site: https://UMCarpentries.github.io/2020-01-06-UMich-WISE
 etherpad: https://pad.carpentries.org/2020-01-06-UMich-WISE
 eventbrite: 
 material: The Unix Shell, R for Reproducibile Scientific Analysis, Version Control with Git
