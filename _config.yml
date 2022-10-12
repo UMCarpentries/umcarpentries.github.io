@@ -11,6 +11,7 @@ array: []
 
 # Build settings
 markdown: kramdown
+future: true
 
 collections:
   instructors:
