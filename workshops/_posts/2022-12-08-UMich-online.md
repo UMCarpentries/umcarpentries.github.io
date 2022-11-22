@@ -1,7 +1,7 @@
 ---
 title: Software Carpentry Workshop
-date: 2021-12-08
-end_date: 2021-12-09
+date: 2022-12-08
+end_date: 2022-12-09
 instructors:
 - Pat Schloss
 - Grace Kenney
