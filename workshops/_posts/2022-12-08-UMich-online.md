@@ -8,11 +8,10 @@ instructors:
 - Pariksheet Nanda
 - Courtney Armour
 helpers:
-- Sarah Arcos
 - Fred Feng
 - Sarah Lucas
 site: https://UMCarpentries.github.io/2022-12-08-UMich-online
-etherpad: https://umcoderspaces.slack.com/archives/C02FXE45KQA
+etherpad: https://um-med-carpentry.slack.com/archives/C04DQSBBKM5
 eventbrite: 
 material: R for Plotting, The Unix Shell, Intro to git & GitHub, R for Data Analysis, Writing Reports with R Markdown
 audience: 
