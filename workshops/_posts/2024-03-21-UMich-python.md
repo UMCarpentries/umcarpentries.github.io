@@ -4,7 +4,7 @@ date: 2024-03-21
 end_date: 2024-03-22
 instructors:
 - Fred Feng
-- 	Pariksheet Nanda
+- Pariksheet Nanda
 helpers:
 - Pat Schloss
 - Cynthia Sopko

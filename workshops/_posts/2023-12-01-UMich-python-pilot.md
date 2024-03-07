@@ -4,7 +4,7 @@ date: 2023-12-01
 end_date: 2023-12-01
 instructors:
 - Fred Feng
-- 	Pariksheet Nanda
+- Pariksheet Nanda
 helpers:
 - Gandhimathi Padmanaban
 - Rayane Moustafa
